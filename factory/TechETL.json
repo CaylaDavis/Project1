@@ -1,0 +1,9 @@
+{
+	"name": "TechETL",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "67bd295a-898c-4270-8db7-1c287b3f7219",
+		"tenantId": "1113be34-aed1-4d00-ab4b-cdd02510be91"
+	}
+}
