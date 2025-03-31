@@ -1,0 +1,60 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "TechETL"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzurePostgreSql1_password": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_password": {
+			"value": ""
+		},
+		"CosmosDbNoSql1_connectionString": {
+			"value": ""
+		},
+		"CosmosDbNoSql2TechCustomer_connectionString": {
+			"value": ""
+		},
+		"ProjectWarehouse_password": {
+			"value": ""
+		},
+		"AzurePostgreSql1_properties_typeProperties_server": {
+			"value": "citus324.postgres.database.azure.com"
+		},
+		"AzurePostgreSql1_properties_typeProperties_database": {
+			"value": "postgres"
+		},
+		"AzurePostgreSql1_properties_typeProperties_username": {
+			"value": "citus"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"value": "citus111.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"value": "GlobalTechWarehouse"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"value": "citus"
+		},
+		"ProjectWarehouse_properties_typeProperties_server": {
+			"value": "citus331.database.windows.net"
+		},
+		"ProjectWarehouse_properties_typeProperties_database": {
+			"value": "ProjectFinals"
+		},
+		"ProjectWarehouse_properties_typeProperties_userName": {
+			"value": "citus"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
