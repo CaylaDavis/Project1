@@ -25,7 +25,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Customers",
+						"referenceName": "Customers1",
 						"type": "DatasetReference"
 					},
 					"name": "CustomerTableSQL"
@@ -105,11 +105,11 @@
 				"CustomerID sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
-				"          customer_id as integer,",
-				"          first_name as string,",
-				"          last_name as string,",
-				"          primary_email as string,",
-				"          phone_number as string",
+				"          CustomerID as integer,",
+				"          FirstName as string,",
+				"          LastName as string,",
+				"          PrimaryEmailAddress as string,",
+				"          PhoneNumber as string",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -120,11 +120,11 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
-				"          customer_id = CustomerID,",
-				"          first_name = {First Name },",
-				"          last_name = {Last Name },",
-				"          primary_email = Email,",
-				"          phone_number = Phone",
+				"          CustomerID,",
+				"          FirstName = {First Name },",
+				"          LastName = {Last Name },",
+				"          PrimaryEmailAddress = Email,",
+				"          PhoneNumber = Phone",
 				"     )) ~> CustomerTableSQL",
 				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
