@@ -24,14 +24,19 @@
 			"transformations": [
 				{
 					"name": "ExtractName"
+				},
+				{
+					"name": "NameSplit"
 				}
 			],
 			"scriptLines": [
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> CSVtoCustomer",
-				"CSVtoCustomer derive() ~> ExtractName",
-				"ExtractName sink(allowSchemaDrift: true,",
+				"CSVtoCustomer derive(Name = regexReplace(     case(         regexMatch(trim(toString(byName('Name'))), `^(Mr\\.|Mrs\\.|Ms\\.|Dr\\.|Prof\\.)`),         regexExtract(trim(toString(byName('Name'))), `^(Mr\\.|Mrs\\.|Ms\\.|Dr\\.|Prof\\.)\\s*(.*)`, 2),         trim(toString(byName('Name')))     ),     `( MD| DDS)$`, '' )) ~> ExtractName",
+				"ExtractName derive({First Name } = split(trim(toString(byName('Name'))), ' ')[1],",
+				"          {Last Name } = split(trim(toString(byName('Name'))), ' ')[2]) ~> NameSplit",
+				"NameSplit sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          customer_id as integer,",
@@ -47,7 +52,12 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> CustomerTableSQL"
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          customer_id = Name,",
+				"          first_name = {First Name },",
+				"          last_name = {Last Name }",
+				"     )) ~> CustomerTableSQL"
 			]
 		}
 	}
