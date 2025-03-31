@@ -17,9 +17,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "TechCustomerSupport"
-				},
-				{
-					"name": "source1"
 				}
 			],
 			"sinks": [
@@ -32,7 +29,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "CosmosDbNoSqlContainer1",
+						"referenceName": "Conversations",
 						"type": "DatasetReference"
 					},
 					"name": "ConversationsTable"
@@ -73,8 +70,6 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'document') ~> TechCustomerSupport",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> source1",
 				"CSVtoCustomer derive(Name = regexReplace(     case(         regexMatch(trim(toString(byName('Name'))), `^(Mr\\.|Mrs\\.|Ms\\.|Dr\\.|Prof\\.)`),         regexExtract(trim(toString(byName('Name'))), `^(Mr\\.|Mrs\\.|Ms\\.|Dr\\.|Prof\\.)\\s*(.*)`, 2),         trim(toString(byName('Name')))     ),     `( MD| DDS)$`, '' )) ~> ExtractName",
 				"ExtractName derive({First Name } = split(trim(toString(byName('Name'))), ' ')[1],",
 				"          {Last Name } = split(trim(toString(byName('Name'))), ' ')[2]) ~> NameSplit",
@@ -129,17 +124,21 @@
 				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
-				"          CustomerID as integer,",
-				"          Profile as (FirstName as string, LastName as string, Email as string),",
-				"          Conversations as (ConversationID as string, Messages as (DateTime as string, Sender as string, Message as string)[])[]",
+				"          ConversationID as string,",
+				"          CustomerID as integer",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
-				"     format: 'document',",
+				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> ConversationsTable"
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          CustomerID,",
+				"          ConversationID = Conversations",
+				"     )) ~> ConversationsTable"
 			]
 		}
 	}

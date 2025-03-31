@@ -1,0 +1,26 @@
+{
+	"name": "Conversations",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ProjectWarehouse",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ConversationID",
+				"type": "varchar"
+			},
+			{
+				"name": "CustomerID",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Conversations"
+		}
+	}
+}
