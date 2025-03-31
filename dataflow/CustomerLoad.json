@@ -27,6 +27,12 @@
 				},
 				{
 					"name": "NameSplit"
+				},
+				{
+					"name": "CheckEnding"
+				},
+				{
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -36,7 +42,18 @@
 				"CSVtoCustomer derive(Name = regexReplace(     case(         regexMatch(trim(toString(byName('Name'))), `^(Mr\\.|Mrs\\.|Ms\\.|Dr\\.|Prof\\.)`),         regexExtract(trim(toString(byName('Name'))), `^(Mr\\.|Mrs\\.|Ms\\.|Dr\\.|Prof\\.)\\s*(.*)`, 2),         trim(toString(byName('Name')))     ),     `( MD| DDS)$`, '' )) ~> ExtractName",
 				"ExtractName derive({First Name } = split(trim(toString(byName('Name'))), ' ')[1],",
 				"          {Last Name } = split(trim(toString(byName('Name'))), ' ')[2]) ~> NameSplit",
-				"NameSplit sink(allowSchemaDrift: true,",
+				"NameSplit derive(Email = regexReplace(toString(byName('Email')), '@.*$', '@example.com')",
+				") ~> CheckEnding",
+				"CheckEnding derive(Phone = case(",
+				"    length(regexReplace(toString(byName('Phone')), '[^0-9]', '')) == 10, ",
+				"    regexReplace(",
+				"        regexReplace(toString(byName('Phone')), '[^0-9]', ''), ",
+				"        '(\\\\d{3})(\\\\d{3})(\\\\d{4})', '($1) $2-$3'",
+				"    ),",
+				"    ''",
+				")",
+				") ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          customer_id as integer,",
@@ -52,12 +69,7 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError',",
-				"     mapColumn(",
-				"          customer_id = Name,",
-				"          first_name = {First Name },",
-				"          last_name = {Last Name }",
-				"     )) ~> CustomerTableSQL"
+				"     errorHandlingOption: 'stopOnFirstError') ~> CustomerTableSQL"
 			]
 		}
 	}
